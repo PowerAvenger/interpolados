@@ -24,7 +24,7 @@ with c2:
     with zona_objetos.container():
         st.title(':orange[e]PowerAPP© ⚡️:rainbow[INTERPOLADOS QH]⚡️')
         st.header('Datos, no palabrería.')
-        st.caption("Copyright by Jose Vidal 2024-2025 :ok_hand:")
+        st.caption("Copyright by Jose Vidal 2025 :ok_hand:")
         
 
         with open("images/banner.png", "rb") as f:
@@ -47,12 +47,12 @@ with c2:
 
         st.text('')
         st.text('')
-        st.info('¡¡Bienvenido a mi :orange[e]PowerAPP!! \n\n'
-                'En ningún sitio vas a encontrar herramientas personalizables para obtener información de los mercados mayoristas y minoristas de electricidad y gas.\n'
+        st.info('¡¡Bienvenido a mi :orange[e]PowerAPP Interpolados!! \n\n'
+                'Comprueba en tiempo real las consecuencias de no tener un contador con registros cuarto horarios.\n'
                 'No dudes en contactar para comentar errores detectados o proponer mejoras en la :orange[e]PowerAPP'
                 , icon="ℹ️")
         
-        url_linkedin = "https://www.linkedin.com/posts/josefvidalsierra_epowerapps-spo2425-telemindex-activity-7281942697399967744-IpFK?utm_source=share&utm_medium=member_deskto"
+        url_linkedin = "https://www.linkedin.com/in/josefvidalsierra/"
         #url_bluesky = "https://bsky.app/profile/poweravenger.bsky.social"
         st.markdown(f"Contacta por privado en mi perfil de [Linkedin]({url_linkedin}) para obtener un código de pago")
         st.text_input('Introduce el código de acceso gratuito', type='password', key='acceso')
