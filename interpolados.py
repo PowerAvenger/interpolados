@@ -7,8 +7,8 @@ st.set_page_config(
     page_icon="⚡",
     layout='wide',
     #layout='centered',
-    initial_sidebar_state='collapsed'
-    #initial_sidebar_state='expanded'
+    #initial_sidebar_state='collapsed'
+    initial_sidebar_state='expanded'
 )
 
 c1, c2, c3 = st.columns(3)

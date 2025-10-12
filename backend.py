@@ -10,6 +10,18 @@ import streamlit as st
 color_real = "#4BA3F7"
 color_interpol = "#F63366"
 
+def generar_menu():
+    with st.sidebar:
+        st.title('INTERPOWER :orange[e]PowerAPP©')
+        st.image('images/banner.png')
+        st.caption("Copyright by Jose Vidal :ok_hand:")
+        #url_apps = "https://powerappspy-josevidal.streamlit.app/"
+        #st.write("Visita mi página de [ePowerAPPs](%s) con un montón de utilidades." % url_apps)
+        url_linkedin = "https://www.linkedin.com/posts/josefvidalsierra_epowerapp-interpolados-activity-7382295139412647936-sCHp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFYBwa4BRZN7ghU77azb6YGy123gZvYnqoE"
+        #url_bluesky = "https://bsky.app/profile/poweravenger.bsky.social"
+        #st.markdown(f"Deja tus comentarios y propuestas en mi perfil de [Linkedin]({url_linkedin}) - ¡Sígueme en [Bluesky]({url_bluesky})!")
+        st.markdown(f"Deja tus comentarios y propuestas en mi perfil de [Linkedin]({url_linkedin})")
+        st.subheader("", divider='rainbow')
 
 # Obtenemos curva CUARTO HORARIA para cálculos reales y HORARIA para simulación por interpolación+++++++++++++++++++++++++++++++++++++++++++++++++++++
 @st.cache_data()

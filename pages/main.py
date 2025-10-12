@@ -1,4 +1,4 @@
-from backend import (obtener_datos_contador, interpolar_cuartohoraria_boe, download_esios_id, combinar_consumos_spot, comparativa_mensual,
+from backend import (obtener_datos_contador, interpolar_cuartohoraria_boe, download_esios_id, combinar_consumos_spot, comparativa_mensual, generar_menu,
                      graficar_consumos, graficar_evol_coste, graficar_spot, graficar_costes
 )
 
@@ -6,11 +6,35 @@ from datetime import date, timedelta
 import pandas as pd
 import streamlit as st
 
-
+generar_menu()
 
 usuario = st.secrets['KEY_AXON_USER']
 password = st.secrets['KEY_AXON_PASSWORD']
-cups= st.secrets['KEY_CUPS'] #6.1 tipo 2
+
+# Cargar suministros desde secrets
+suministros = st.secrets["suministros"]
+#cups= st.secrets['KEY_CUPS'] #6.1 tipo 2
+
+#st.write(suministros)
+
+# Crear lista de etiquetas legibles para el selector
+labels = [
+    f"{data['peaje']} - tipo {data['tipo']}"
+    #f"{data['cups']} ({data['peaje']} - tipo {data['tipo']})"
+    for data in suministros.values()
+]
+
+# Mostrar el selectbox en el sidebar
+seleccion_label = st.sidebar.selectbox(
+    "Selecciona un suministro:",
+    options=labels
+)
+
+# Obtener el diccionario correspondiente al suministro elegido
+seleccion = list(suministros.values())[labels.index(seleccion_label)]
+cups = seleccion['cups']
+
+
 fecha_inicio = '2025-10-01'
 fecha_fin = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
 tipo_curva = 'TM2'
