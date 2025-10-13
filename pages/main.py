@@ -13,27 +13,31 @@ password = st.secrets['KEY_AXON_PASSWORD']
 
 # Cargar suministros desde secrets
 suministros = st.secrets["suministros"]
-#cups= st.secrets['KEY_CUPS'] #6.1 tipo 2
-
-#st.write(suministros)
-
 # Crear lista de etiquetas legibles para el selector
 labels = [
     f"{data['peaje']} - tipo {data['tipo']}"
     #f"{data['cups']} ({data['peaje']} - tipo {data['tipo']})"
     for data in suministros.values()
 ]
-
 # Mostrar el selectbox en el sidebar
 seleccion_label = st.sidebar.selectbox(
     "Selecciona un suministro:",
     options=labels
 )
-
 # Obtener el diccionario correspondiente al suministro elegido
 seleccion = list(suministros.values())[labels.index(seleccion_label)]
 cups = seleccion['cups']
 
+# Estado para controlar si ya se actualizó manualmente
+if "actualizado" not in st.session_state:
+    st.session_state.actualizado = False
+
+# Botón con deshabilitado tras actualizar
+if st.sidebar.button("🔄 Actualizar datos", disabled=st.session_state.actualizado):
+    st.cache_data.clear()
+    st.session_state.actualizado = True
+    st.success("Datos actualizados correctamente.")
+    st.rerun()
 
 fecha_inicio = '2025-10-01'
 fecha_fin = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')

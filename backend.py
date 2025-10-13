@@ -24,7 +24,7 @@ def generar_menu():
         st.subheader("", divider='rainbow')
 
 # Obtenemos curva CUARTO HORARIA para cálculos reales y HORARIA para simulación por interpolación+++++++++++++++++++++++++++++++++++++++++++++++++++++
-@st.cache_data()
+@st.cache_data(ttl=86400)
 def obtener_datos_contador(usuario, password, cups, fecha_inicio, fecha_fin, tipo_curva):
 
     # URL de autenticación
@@ -182,7 +182,7 @@ def interpolar_cuartohoraria_boe(df_ch):
 
 
 # DESCARGAMOS SPOT QH++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-@st.cache_data()
+@st.cache_data(ttl=86400)
 def download_esios_id(id, fecha_ini, fecha_fin, agrupacion, agregacion):
         
         #token = st.secrets['ESIOS_API_KEY']
