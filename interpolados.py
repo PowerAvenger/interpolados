@@ -54,7 +54,7 @@ with c2:
         
         url_linkedin = "https://www.linkedin.com/in/josefvidalsierra/"
         #url_bluesky = "https://bsky.app/profile/poweravenger.bsky.social"
-        st.markdown(f"Contacta por privado en mi perfil de [Linkedin]({url_linkedin}) para obtener un código de pago")
+        st.markdown(f"Contacta por privado en mi perfil de [Linkedin]({url_linkedin}) para obtener un código de acceso gratuito")
         st.text_input('Introduce el código de acceso gratuito', type='password', key='acceso')
         if st.session_state.acceso == st.secrets['KEY_ACCESS']:
 
