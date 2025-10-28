@@ -72,6 +72,9 @@ def obtener_datos_contador(usuario, password, cups, fecha_inicio, fecha_fin, tip
                             df_cch_real = df_cch_real[["datetime", "hora", "energia"]].copy()
                             df_cch_real = df_cch_real.rename(columns={'energia':'consumo_real'})
 
+                            df_cch_real = df_cch_real.drop_duplicates(subset='datetime', keep='first').sort_values('datetime')
+                            df_cch_real.loc[df_cch_real['hora'] == 25, 'hora'] = 3
+
                             # Resamplear a frecuencia horaria
                             df_ch = df_cch_real.resample("H", on="datetime").agg({
                                 "consumo_real": "sum",      # sumar la energía de los 4 cuartos de hora
