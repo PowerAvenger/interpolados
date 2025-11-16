@@ -2,7 +2,7 @@ from backend import (obtener_datos_contador, interpolar_cuartohoraria_boe, downl
                      graficar_consumos, graficar_evol_coste, graficar_spot, graficar_costes
 )
 
-from datetime import date, timedelta
+from datetime import date, datetime
 import pandas as pd
 import streamlit as st
 
@@ -39,8 +39,35 @@ if st.sidebar.button("🔄 Actualizar datos", disabled=st.session_state.actualiz
     st.success("Datos actualizados correctamente.")
     st.rerun()
 
-fecha_inicio = '2025-10-01'
-fecha_fin = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+#fecha_inicio = '2025-10-01'
+#fecha_fin = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+# --- Generar lista de meses desde octubre 2025 hasta hoy ---
+mes_inicio_fijo = datetime(2025, 10, 1)
+hoy = date.today()
+
+# Creamos rango de meses (inicio de mes)
+fechas_meses = pd.date_range(mes_inicio_fijo, hoy, freq="MS")
+
+# Nombres legibles para el usuario, tipo "Octubre 2025"
+nombres_meses = [f.strftime("%B %Y").capitalize() for f in fechas_meses]
+
+# Selectbox con valor actual por defecto
+seleccion = st.sidebar.selectbox(
+    "📅 Selecciona mes de análisis",
+    nombres_meses,
+    index=len(nombres_meses) - 1
+)
+
+# Obtener fecha seleccionada (inicio del mes)
+mes_seleccionado = fechas_meses[nombres_meses.index(seleccion)]
+
+# Calcular inicio y fin del mes
+fecha_inicio = mes_seleccionado.date()
+fecha_fin = (mes_seleccionado + pd.offsets.MonthEnd(1)).date()
+
+
 tipo_curva = 'TM2'
 
 df_cch_real, df_ch = obtener_datos_contador(usuario, password, cups, fecha_inicio, fecha_fin, tipo_curva)

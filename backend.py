@@ -364,6 +364,7 @@ def graficar_spot(df_spot):
         xaxis=dict(
             title='Fecha-Hora (cada 15 minutos)',
             showgrid=True,
+            dtick=24 * 60 * 60 * 1000,
             rangeslider=dict(
                 visible=True,
                 bgcolor='rgba(173, 216, 230, 0.5)',  # azul semitransparente
