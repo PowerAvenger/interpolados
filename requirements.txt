@@ -1,5 +1,7 @@
 pandas
 plotly.express
-streamlit
+#streamlit
 requests
 plotly
+altair<5
+streamlit==1.36.0
