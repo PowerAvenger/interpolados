@@ -240,6 +240,9 @@ def combinar_consumos_spot(df_comp, df_spot):
     df_comp["coste_interpolado"] = df_comp["consumo_interpolado"] * df_comp["spot"]/1000
     df_comp['dif_consumo'] = df_comp['consumo_interpolado'] - df_comp['consumo_real']
 
+    print('df costes consumos qh')
+    print(df_comp)
+
     return df_comp
 
 
@@ -436,7 +439,7 @@ def graficar_costes(df_comp):
 
 # GRAFICO EVOLUCIÓN MENSUAL DE LA COMPARATIVA COSTE REAL VS INTERPOLADO
 
-def graficar_evol_coste(df_comp_diario, mes_nombre):
+def graficar_evol_coste(df_comp_diario, mes_nombre, param):
 
     category_order = list(df_comp_diario["dia_num"])  # ['1','2',...,'31','TOTAL']
 
@@ -464,8 +467,12 @@ def graficar_evol_coste(df_comp_diario, mes_nombre):
         connector={"line": {"color": "rgb(90,90,90)"}},
     ))
 
+    if param=='qh':
+        titulo = f"Evolución del coste mensual por interpolación de la curva horaria vs real cuarto horaria - {mes_nombre} de 2025"
+    else:
+        titulo = f"Evolución del coste mensual real cuarto horaria vs horaria - {mes_nombre} de 2025"
     fig_waterfall.update_layout(
-        title=f"Evolución del coste mensual por interpolación de la curva horaria vs real cuarto horaria - {mes_nombre} de 2025",
+        title=titulo,
         xaxis_title="Día",
         yaxis_title="Diferencia diaria (€)",
         #width=1200,
@@ -481,5 +488,112 @@ def graficar_evol_coste(df_comp_diario, mes_nombre):
     )
 
     return fig_waterfall
+
+
+def comparativa_mensual_qh_vs_h2(df_qh, df_h):
+
+    df_qh_d = (
+        df_qh
+            .set_index('datetime')
+            .resample('D')['coste_real']
+            .sum()
+            .reset_index()
+            .rename(columns={'coste_real': 'coste_qh'})
+    )
+
+    df_h_d = (
+        df_h
+            .set_index('datetime')
+            .resample('D')['coste_real']
+            .sum()
+            .reset_index()
+            .rename(columns={'coste_real': 'coste_h'})
+    )
+
+    df = df_qh_d.merge(df_h_d, on='datetime', how='outer')
+
+    df['dif_dia'] = df['coste_h'] - df['coste_qh']
+    df['dia_num'] = df['datetime'].dt.day.astype(str)
+
+    total_qh = df['coste_qh'].sum()
+    total_h = df['coste_h'].sum()
+    total_dif = total_h - total_qh
+
+    resumen = {
+        'total_qh': total_qh,
+        'total_h': total_h,
+        'dif_total': total_dif,
+        'impacto_pct': total_dif / total_qh * 100
+    }
+
+    return df, resumen
+
+def comparativa_mensual_qh_vs_h(df_qh, df_h):
+
+    # --- Agregación diaria QH ---
+    df_qh_d = (
+        df_qh
+            .set_index('datetime')
+            .resample('D')['coste_real']
+            .sum()
+            .reset_index()
+            .rename(columns={'coste_real': 'coste_qh'})
+    )
+
+    # --- Agregación diaria H ---
+    df_h_d = (
+        df_h
+            .set_index('datetime')
+            .resample('D')['coste_real']
+            .sum()
+            .reset_index()
+            .rename(columns={'coste_real': 'coste_h'})
+    )
+
+    # --- Merge diario ---
+    df = df_qh_d.merge(df_h_d, on='datetime', how='outer')
+
+    df['dif_dia'] = df['coste_h'] - df['coste_qh']
+    df['dia_num'] = df['datetime'].dt.day.astype(str)
+
+    # --- Obtener mes y año ---
+    fecha_inicio = df['datetime'].iloc[0]
+    año = fecha_inicio.year
+    mes = fecha_inicio.month
+    mes_nombre = fecha_inicio.strftime('%B').capitalize()
+
+    # --- Eje completo 1..N ---
+    dias_mes = [str(i) for i in range(1, calendar.monthrange(año, mes)[1] + 1)]
+
+    df = df[['dia_num', 'coste_qh', 'coste_h', 'dif_dia']]
+
+    df = pd.merge(
+        pd.DataFrame({'dia_num': dias_mes}),
+        df,
+        on='dia_num',
+        how='left'
+    )
+
+    # --- Resumen mensual ---
+    total_qh = df['coste_qh'].sum(skipna=True)
+    total_h = df['coste_h'].sum(skipna=True)
+    total_dif = total_h - total_qh
+
+    resumen = {
+        "total_qh": total_qh,
+        "total_h": total_h,
+        "dif_total": total_dif,
+        "impacto_pct": (total_dif / total_qh * 100) if total_qh != 0 else 0
+    }
+
+    # --- Añadir fila TOTAL ---
+    df.loc[len(df)] = {
+        'dia_num': 'TOTAL',
+        'coste_qh': total_qh,
+        'coste_h': total_h,
+        'dif_dia': total_dif
+    }
+
+    return df, resumen
 
 
