@@ -468,9 +468,9 @@ def graficar_evol_coste(df_comp_diario, mes_nombre, param):
     ))
 
     if param=='qh':
-        titulo = f"Evolución del coste mensual por interpolación de la curva horaria vs real cuarto horaria - {mes_nombre} de 2025"
+        titulo = f"Evolución del coste mensual por interpolación de la curva horaria vs real cuarto horaria - {mes_nombre}"
     else:
-        titulo = f"Evolución del coste mensual real cuarto horaria vs horaria - {mes_nombre} de 2025"
+        titulo = f"Evolución del coste mensual real cuarto horaria vs horaria - {mes_nombre}"
     fig_waterfall.update_layout(
         title=titulo,
         xaxis_title="Día",

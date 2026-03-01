@@ -54,6 +54,10 @@ fechas_meses = pd.date_range(mes_inicio_fijo, hoy, freq="MS")
 # Nombres legibles para el usuario, tipo "Octubre 2025"
 nombres_meses = [f.strftime("%B %Y").capitalize() for f in fechas_meses]
 
+#indice = nombres_meses.index(seleccion)
+#fecha_seleccionada = fechas_meses[indice]
+#año_seleccionado = fecha_seleccionada.year
+
 # Selectbox con valor actual por defecto
 seleccion = st.sidebar.selectbox(
     "📅 Selecciona mes de análisis",
@@ -125,7 +129,8 @@ df_comp_diario, mes_nombre = comparativa_mensual(df_comp_cch)
 graf_comp_consumos = graficar_consumos(df_comp_cch)
 graf_spot = graficar_spot(df_spot_qh)
 graf_comp_costes = graficar_costes(df_comp_cch)
-graf_evol_coste = graficar_evol_coste(df_comp_diario, mes_nombre, 'qh')
+#graf_evol_coste = graficar_evol_coste(df_comp_diario, mes_nombre, 'qh')
+graf_evol_coste = graficar_evol_coste(df_comp_diario, seleccion, 'qh')
 
 #METRIC CONSUMOS
 total_consumo_real = df_comp_cch['consumo_real'].sum()
@@ -143,7 +148,8 @@ diferencia_total_coste_porc = round(diferencia_total_coste*100 / total_coste_rea
 
 
 df_comp_diario_cch_ch, resumen = comparativa_mensual_qh_vs_h(df_comp_cch, df_comp_ch)
-graf_evol_coste_2 = graficar_evol_coste(df_comp_diario_cch_ch, mes_nombre, 'h')
+#graf_evol_coste_2 = graficar_evol_coste(df_comp_diario_cch_ch, mes_nombre, 'h')
+graf_evol_coste_2 = graficar_evol_coste(df_comp_diario_cch_ch, seleccion, 'h')
 
 #LAYOUT
 c1a, c2a =st.columns(2)
